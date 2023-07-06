@@ -53,7 +53,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel.fetchAllMealCategories()
+        //mainViewModel.fetchAllMealCategories()
+        mainViewModel.fetchAllMealsByMainIngredient("chicken_breast")
         init()
     }
 
