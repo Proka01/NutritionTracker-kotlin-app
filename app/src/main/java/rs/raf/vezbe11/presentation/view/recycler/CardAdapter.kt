@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import rs.raf.vezbe11.R
@@ -32,6 +33,26 @@ class CardAdapter(private val cardItems: List<CardItem>) :
         private val titleTextView: TextView = itemView.findViewById(R.id.titleTextView)
         private val menuIcon: ImageView = itemView.findViewById(R.id.menuIcon)
 
+        //function that makes pop up dialog
+        fun onAlertDialog(view: View, cardItem: CardItem) {
+            //Instantiate builder variable
+            val builder = AlertDialog.Builder(view.context)
+
+            // set title
+            builder.setTitle(cardItem.title)
+
+            //set content area
+            builder.setMessage(cardItem.desc)
+
+            //set positive button
+            builder.setNegativeButton(
+                "Leave") { dialog, id ->
+                // User cancelled the dialog
+            }
+
+            builder.show()
+        }
+
         fun bind(cardItem: CardItem) {
             titleTextView.text = cardItem.title
 
@@ -46,7 +67,8 @@ class CardAdapter(private val cardItems: List<CardItem>) :
             menuIcon.setOnClickListener {
                 // Handle menu icon click
                 // You can perform actions specific to the menu icon here
-                Toast.makeText(itemView.context, cardItem.title, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(itemView.context, cardItem.title, Toast.LENGTH_SHORT).show()
+                onAlertDialog(itemView,cardItem)
             }
 
             // Set click listener for the whole card

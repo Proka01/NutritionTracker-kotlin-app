@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.data.models.MealCategory
@@ -22,7 +23,7 @@ import rs.raf.vezbe11.presentation.viewmodel.MainViewModel
 
 class CategoriesFragment : Fragment() {
 
-    private val mainViewModel: MainContract.ViewModel by viewModel<MainViewModel>()
+    private val mainViewModel: MainContract.ViewModel by sharedViewModel<MainViewModel>()
     private lateinit var rootView: View
 
     private lateinit var recyclerView: RecyclerView
