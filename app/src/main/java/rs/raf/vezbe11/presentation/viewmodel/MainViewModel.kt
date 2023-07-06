@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.repositories.MealCategoryRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
@@ -63,6 +64,30 @@ class MainViewModel(
             return result
         }
         return "Nije successs"
+    }
+
+    override fun getMealCategoryListFromMealCategoryState(): List<MealCategory> {
+        val state = mealCategoryState.value
+
+        if (state is MealCategoryState.Success) {
+            val mealCategories = state.mealCategories
+            val mealCategoryList = mutableListOf<MealCategory>()
+
+            for (category in mealCategories) {
+                val mealCategory = MealCategory(
+                    idCategory = category.idCategory,
+                    strCategory = category.strCategory,
+                    strCategoryThumb = category.strCategoryThumb,
+                    strCategoryDescription = category.strCategoryDescription
+                )
+                mealCategoryList.add(mealCategory)
+            }
+
+            return mealCategoryList
+        }
+
+        return emptyList() // Return an empty list if the state is not success
+
     }
 
 
