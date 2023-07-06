@@ -14,7 +14,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import rs.raf.vezbe11.BuildConfig
-import rs.raf.vezbe11.data.datasources.local.MovieDataBase
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -23,10 +22,6 @@ val coreModule = module {
     single<SharedPreferences> {
         androidApplication().getSharedPreferences(androidApplication().packageName, Context.MODE_PRIVATE)
     }
-
-    single { Room.databaseBuilder(androidContext(), MovieDataBase::class.java, "MovieDb")
-        .fallbackToDestructiveMigration()
-        .build() }
 
     single { createRetrofit(moshi = get(), httpClient = get()) }
 
@@ -45,8 +40,7 @@ fun createRetrofit(moshi: Moshi,
                    httpClient: OkHttpClient
 ): Retrofit {
     return Retrofit.Builder()
-        .baseUrl("https://ghibliapi.vercel.app/")
-//        .baseUrl("https://ghibliapi.herokuapp.com/")
+        .baseUrl("https://www.themealdb.com/api/json/v1/1/")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
         .client(httpClient)

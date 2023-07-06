@@ -3,6 +3,6 @@ package rs.raf.vezbe11.data.models
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class AllMoviesResponse (
-    val allMovies: List<MovieResponse>
-)
+class MealCategoryWrapperResponse (
+    val categories: List<MealCategoryResponse>
+    )
