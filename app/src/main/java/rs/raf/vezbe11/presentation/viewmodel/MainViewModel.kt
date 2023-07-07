@@ -11,6 +11,7 @@ import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.repositories.MealAPIRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
+import rs.raf.vezbe11.presentation.view.states.IngrediantState
 import rs.raf.vezbe11.presentation.view.states.MealCategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import timber.log.Timber
@@ -26,6 +27,9 @@ class MainViewModel(
     override val filteredMealsByAreaState: MutableLiveData<MealState> = MutableLiveData()
     override val filteredMealsByMainIngredientState: MutableLiveData<MealState> = MutableLiveData()
     override val filteredMealsByNameState: MutableLiveData<MealState> = MutableLiveData()
+
+    override val areaState: MutableLiveData<MealState> = MutableLiveData()
+    override val ingredientState: MutableLiveData<IngrediantState> = MutableLiveData()
     override fun fetchAllMealsByFirstLetter(letter : String) {
         var subscription = mealAPIRepository
             .fetchAllMealsByFirstLetter(letter)
@@ -158,6 +162,50 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    override fun fetchAllAreas() {
+        var subscription = mealAPIRepository
+            .fetchAllAreas()
+            .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    when(it) {
+                        is Resource.Loading -> areaState.value = MealState.Loading
+                        is Resource.Success -> areaState.value = MealState.Success(it.data)
+                        is Resource.Error -> areaState.value = MealState.Error("Error happened while fetching data from the server")
+                    }
+                },
+                {
+                    areaState.value = MealState.Error("Error happened while fetching data from the server")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun fetchAllIngredients() {
+        var subscription = mealAPIRepository
+            .fetchAllIngredients()
+            .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    when(it) {
+                        is Resource.Loading -> ingredientState.value = IngrediantState.Loading
+                        is Resource.Success -> ingredientState.value = IngrediantState.Success(it.data)
+                        is Resource.Error -> ingredientState.value = IngrediantState.Error("Error happened while fetching data from the server")
+                    }
+                },
+                {
+                    ingredientState.value = IngrediantState.Error("Error happened while fetching data from the server")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun printMealCategoryState(): String {
         val state = mealCategoryState.value
         println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
@@ -250,6 +298,57 @@ class MainViewModel(
         }
 
         return emptyList() // Return an empty list if the state is not success
+    }
+
+    override fun getArrayOfCategories(): Array<String?> {
+        val state = mealCategoryState.value
+        var array: Array<String?> = arrayOf()
+
+        if (state is MealCategoryState.Success) {
+            val mealCategories = state.mealCategories
+
+            for (category in mealCategories) {
+                array += category.strCategory
+            }
+
+            return array
+        }
+
+        return array // Return an empty list if the state is not success
+    }
+
+    override fun getArrayOfAreas(): Array<String?> {
+        val state = areaState.value
+        var array: Array<String?> = arrayOf()
+
+        if (state is MealState.Success) {
+            val meals = state.meals
+
+            for (m in meals) {
+                array += m.strArea
+            }
+
+            return array
+        }
+
+        return array // Return an empty list if the state is not success
+    }
+
+    override fun getArrayOfIngredients(): Array<String?> {
+        val state = ingredientState.value
+        var array: Array<String?> = arrayOf()
+
+        if (state is IngrediantState.Success) {
+            val ingredients = state.ingredient
+
+            for (ingr in ingredients) {
+                array += ingr.strIngredient
+            }
+
+            return array
+        }
+
+        return array // Return an empty list if the state is not success
     }
 
 

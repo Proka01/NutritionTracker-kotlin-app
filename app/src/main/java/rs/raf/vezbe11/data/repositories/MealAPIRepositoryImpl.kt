@@ -2,10 +2,7 @@ package rs.raf.vezbe11.data.repositories
 
 import io.reactivex.Observable
 import rs.raf.vezbe11.data.datasources.remote.MealAPIService
-import rs.raf.vezbe11.data.models.FilteredMealResponse
-import rs.raf.vezbe11.data.models.MealCategoryResponse
-import rs.raf.vezbe11.data.models.MealResponse
-import rs.raf.vezbe11.data.models.Resource
+import rs.raf.vezbe11.data.models.*
 
 class MealAPIRepositoryImpl(
     private val remoteDataSource: MealAPIService
@@ -54,6 +51,22 @@ class MealAPIRepositoryImpl(
     override fun fetchMealsByName(name: String): Observable<Resource<List<MealResponse>>> {
         return remoteDataSource
             .getMealsByName(name)
+            .map {
+                Resource.Success(it.meals)
+            }
+    }
+
+    override fun fetchAllAreas(): Observable<Resource<List<MealResponse>>> {
+        return remoteDataSource
+            .getAllAreas()
+            .map {
+                Resource.Success(it.meals)
+            }
+    }
+
+    override fun fetchAllIngredients(): Observable<Resource<List<IngredientResponse>>> {
+        return remoteDataSource
+            .getAllIngredients()
             .map {
                 Resource.Success(it.meals)
             }

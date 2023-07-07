@@ -2,13 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RadioGroup
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Fragment filter"
-        android:textSize="24sp" />
+        android:id="@+id/radioGroupFilter"
+        android:checkedButton="@+id/categoryRBTN"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/categoryRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Category"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/areaRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Area"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/ingredientRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ingredient"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+    </RadioGroup>
+
+    <!-- Combobox (Spinner) -->
+    <Spinner
+        android:id="@+id/comboBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

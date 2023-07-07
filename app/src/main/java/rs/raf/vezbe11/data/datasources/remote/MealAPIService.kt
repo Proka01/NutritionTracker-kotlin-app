@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import rs.raf.vezbe11.data.models.FilteredMealWrapperResponse
+import rs.raf.vezbe11.data.models.IngredientWrapperResponse
 import rs.raf.vezbe11.data.models.MealCategoryWrapperResponse
 import rs.raf.vezbe11.data.models.MealWrapperResponse
 
@@ -26,4 +27,11 @@ interface MealAPIService {
 
     @GET("search.php?")
     fun getMealsByName(@Query("s") name : String): Observable<MealWrapperResponse>
+
+    @GET("list.php?a=list")
+    fun getAllAreas() : Observable<MealWrapperResponse>
+
+    @GET("list.php?i=list")
+    fun getAllIngredients() : Observable<IngredientWrapperResponse>
+
 }

@@ -1,10 +1,7 @@
 package rs.raf.vezbe11.data.repositories
 
 import io.reactivex.Observable
-import rs.raf.vezbe11.data.models.FilteredMealResponse
-import rs.raf.vezbe11.data.models.MealCategoryResponse
-import rs.raf.vezbe11.data.models.MealResponse
-import rs.raf.vezbe11.data.models.Resource
+import rs.raf.vezbe11.data.models.*
 
 interface MealAPIRepository {
     fun fetchAllMealCategories(): Observable<Resource<List<MealCategoryResponse>>>
@@ -17,4 +14,8 @@ interface MealAPIRepository {
     fun fetchAllMealsByMainIngredient(mainIngredient : String) : Observable<Resource<List<MealResponse>>>
 
     fun fetchMealsByName(name : String) : Observable<Resource<List<MealResponse>>>
+
+    fun fetchAllAreas() : Observable<Resource<List<MealResponse>>>
+
+    fun fetchAllIngredients() : Observable<Resource<List<IngredientResponse>>>
 }

@@ -104,23 +104,23 @@ class MealListActivity : AppCompatActivity() {
             else mainViewModel.fetchAllMealsByMainIngredient(editText.text.toString())
         }
 
-        editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // This method is called before the text is changed
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if(editText.text.isBlank() || editText.text.isEmpty()) mainViewModel.fetchAllMealsByCategory(category)
-                else if (nameRadioBtn.isChecked) mainViewModel.fetchMealsByName(editText.text.toString())
-                else mainViewModel.fetchAllMealsByMainIngredient(editText.text.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // This method is called after the text has been changed
-                val text = s.toString()
-                // Perform actions based on the updated text
-            }
-        })
+//        editText.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                // This method is called before the text is changed
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                if(editText.text.isBlank() || editText.text.isEmpty()) mainViewModel.fetchAllMealsByCategory(category)
+//                else if (nameRadioBtn.isChecked) mainViewModel.fetchMealsByName(editText.text.toString())
+//                else mainViewModel.fetchAllMealsByMainIngredient(editText.text.toString())
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                // This method is called after the text has been changed
+//                val text = s.toString()
+//                // Perform actions based on the updated text
+//            }
+//        })
     }
 
     private fun initRecycler() {

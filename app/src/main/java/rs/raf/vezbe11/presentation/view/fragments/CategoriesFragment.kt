@@ -37,6 +37,8 @@ class CategoriesFragment : Fragment() {
 
         //re-fetch the data from api to trigger observer
         mainViewModel.fetchAllMealCategories()
+        mainViewModel.fetchAllAreas()
+        mainViewModel.fetchAllIngredients()
         rootView = inflater.inflate(R.layout.fragment_categories, container, false)
         init()
 
