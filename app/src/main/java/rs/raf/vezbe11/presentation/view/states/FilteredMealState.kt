@@ -6,6 +6,6 @@ import rs.raf.vezbe11.data.models.MealResponse
 sealed class FilteredMealState{
     object Loading: FilteredMealState()
     object DataFetched: FilteredMealState()
-    data class Success(val mealCategories: List<FilteredMealResponse>): FilteredMealState()
+    data class Success(val meals: List<FilteredMealResponse>): FilteredMealState()
     data class Error(val message: String): FilteredMealState()
 }

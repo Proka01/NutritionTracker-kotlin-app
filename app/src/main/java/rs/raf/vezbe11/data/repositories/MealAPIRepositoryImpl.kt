@@ -27,7 +27,7 @@ class MealAPIRepositoryImpl(
             }
     }
 
-    override fun fetchAllMealsByCategory(category: String): Observable<Resource<List<FilteredMealResponse>>> {
+    override fun fetchAllMealsByCategory(category: String): Observable<Resource<List<MealResponse>>> {
         return remoteDataSource
             .getAllMealsByCategory(category)
             .map {
@@ -35,7 +35,7 @@ class MealAPIRepositoryImpl(
             }
     }
 
-    override fun fetchAllMealsByArea(area: String): Observable<Resource<List<FilteredMealResponse>>> {
+    override fun fetchAllMealsByArea(area: String): Observable<Resource<List<MealResponse>>> {
         return remoteDataSource
             .getAllMealsByArea(area)
             .map {
@@ -43,7 +43,7 @@ class MealAPIRepositoryImpl(
             }
     }
 
-    override fun fetchAllMealsByMainIngredient(mainIngredient: String): Observable<Resource<List<FilteredMealResponse>>> {
+    override fun fetchAllMealsByMainIngredient(mainIngredient: String): Observable<Resource<List<MealResponse>>> {
         return remoteDataSource
             .getAllMealsByMainIngredient(mainIngredient)
             .map {

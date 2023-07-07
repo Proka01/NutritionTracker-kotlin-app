@@ -16,11 +16,11 @@ interface MealAPIService {
     fun getAllMealsByFirstLetter(@Query("f") letter : String): Observable<MealWrapperResponse>
 
     @GET("filter.php?")
-    fun getAllMealsByCategory(@Query("c") category : String): Observable<FilteredMealWrapperResponse>
+    fun getAllMealsByCategory(@Query("c") category : String): Observable<MealWrapperResponse>
 
     @GET("filter.php?")
-    fun getAllMealsByArea(@Query("a") area : String): Observable<FilteredMealWrapperResponse>
+    fun getAllMealsByArea(@Query("a") area : String): Observable<MealWrapperResponse>
 
     @GET("filter.php?")
-    fun getAllMealsByMainIngredient(@Query("i") main_ingredient : String): Observable<FilteredMealWrapperResponse>
+    fun getAllMealsByMainIngredient(@Query("i") main_ingredient : String): Observable<MealWrapperResponse>
 }
