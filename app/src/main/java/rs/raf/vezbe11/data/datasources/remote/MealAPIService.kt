@@ -23,4 +23,7 @@ interface MealAPIService {
 
     @GET("filter.php?")
     fun getAllMealsByMainIngredient(@Query("i") main_ingredient : String): Observable<MealWrapperResponse>
+
+    @GET("search.php?")
+    fun getMealsByName(@Query("s") name : String): Observable<MealWrapperResponse>
 }

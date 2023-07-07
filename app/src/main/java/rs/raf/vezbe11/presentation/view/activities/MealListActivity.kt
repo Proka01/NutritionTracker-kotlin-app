@@ -2,20 +2,19 @@ package rs.raf.vezbe11.presentation.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
-import rs.raf.vezbe11.data.models.Meal
-import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.MealCardAdapter
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
-import rs.raf.vezbe11.presentation.view.states.MealCategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.viewmodel.MainViewModel
 
@@ -29,19 +28,21 @@ class MealListActivity : AppCompatActivity() {
     private lateinit var nextBtn: Button
     private lateinit var prevBtn: Button
     private lateinit var searchMealBtn : Button
+    private lateinit var editText: EditText
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
 
     private val pageSize = 10
     private val adapter = MealCardAdapter(pageSize)
+    private lateinit var category : String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_meal_list)
 
-        val category = intent.getStringExtra("message")
+        category = intent.getStringExtra("message").toString()
         if (category != null) {
             println("FECOVO SAM JELA")
             mainViewModel.fetchAllMealsByCategory(category)
@@ -96,6 +97,30 @@ class MealListActivity : AppCompatActivity() {
                 adapter.updateItems(currentCardItems)
             }
         }
+
+        searchMealBtn.setOnClickListener{
+            if(editText.text.isBlank() || editText.text.isEmpty()) mainViewModel.fetchAllMealsByCategory(category)
+            else if (nameRadioBtn.isChecked) mainViewModel.fetchMealsByName(editText.text.toString())
+            else mainViewModel.fetchAllMealsByMainIngredient(editText.text.toString())
+        }
+
+        editText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called before the text is changed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(editText.text.isBlank() || editText.text.isEmpty()) mainViewModel.fetchAllMealsByCategory(category)
+                else if (nameRadioBtn.isChecked) mainViewModel.fetchMealsByName(editText.text.toString())
+                else mainViewModel.fetchAllMealsByMainIngredient(editText.text.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // This method is called after the text has been changed
+                val text = s.toString()
+                // Perform actions based on the updated text
+            }
+        })
     }
 
     private fun initRecycler() {
@@ -116,6 +141,7 @@ class MealListActivity : AppCompatActivity() {
         else
             initialCardItems = mealCardItems.subList(startIndex, endIndex)
 
+        adapter.currentPage = 1 // mozda ne treba
         adapter.updateItems(initialCardItems)
     }
 
@@ -125,13 +151,46 @@ class MealListActivity : AppCompatActivity() {
         nextBtn = findViewById(R.id.nextBtn)
         prevBtn = findViewById(R.id.prevBtn)
         searchMealBtn = findViewById(R.id.searchMealBtn)
+        editText = findViewById(R.id.searchByEditText)
+
+        nameRadioBtn.isChecked = true
     }
 
     private fun initObservers() {
         mainViewModel.filteredMealsByCategoryState.observe(this, Observer {
             when(it){
                 is MealState.Success ->{
-                    mealCardItems = mainViewModel.getMealCardItemListFromMealState().toMutableList()
+                    mealCardItems = mainViewModel.getMealCardItemListFromMealState(mainViewModel.filteredMealsByCategoryState).toMutableList()
+                    initRecycler()
+                }
+                is MealState.Loading ->{
+                    println("State je loading")
+                }
+                else -> {
+                    println("CEKAJ $it")
+                }
+            }
+        })
+
+        mainViewModel.filteredMealsByNameState.observe(this, Observer {
+            when(it){
+                is MealState.Success ->{
+                    mealCardItems = mainViewModel.getMealCardItemListFromMealState(mainViewModel.filteredMealsByNameState).toMutableList()
+                    initRecycler()
+                }
+                is MealState.Loading ->{
+                    println("State je loading")
+                }
+                else -> {
+                    println("CEKAJ $it")
+                }
+            }
+        })
+
+        mainViewModel.filteredMealsByMainIngredientState.observe(this, Observer {
+            when(it){
+                is MealState.Success ->{
+                    mealCardItems = mainViewModel.getMealCardItemListFromMealState(mainViewModel.filteredMealsByMainIngredientState).toMutableList()
                     initRecycler()
                 }
                 is MealState.Loading ->{

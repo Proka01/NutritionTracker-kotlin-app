@@ -51,4 +51,12 @@ class MealAPIRepositoryImpl(
             }
     }
 
+    override fun fetchMealsByName(name: String): Observable<Resource<List<MealResponse>>> {
+        return remoteDataSource
+            .getMealsByName(name)
+            .map {
+                Resource.Success(it.meals)
+            }
+    }
+
 }

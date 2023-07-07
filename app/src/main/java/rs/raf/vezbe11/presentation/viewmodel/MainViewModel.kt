@@ -1,17 +1,16 @@
 package rs.raf.vezbe11.presentation.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import rs.raf.vezbe11.data.models.Meal
 import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.repositories.MealAPIRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
-import rs.raf.vezbe11.presentation.view.states.FilteredMealState
 import rs.raf.vezbe11.presentation.view.states.MealCategoryState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import timber.log.Timber
@@ -26,6 +25,7 @@ class MainViewModel(
     override val filteredMealsByCategoryState: MutableLiveData<MealState> = MutableLiveData()
     override val filteredMealsByAreaState: MutableLiveData<MealState> = MutableLiveData()
     override val filteredMealsByMainIngredientState: MutableLiveData<MealState> = MutableLiveData()
+    override val filteredMealsByNameState: MutableLiveData<MealState> = MutableLiveData()
     override fun fetchAllMealsByFirstLetter(letter : String) {
         var subscription = mealAPIRepository
             .fetchAllMealsByFirstLetter(letter)
@@ -136,6 +136,28 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    override fun fetchMealsByName(name: String) {
+        var subscription = mealAPIRepository
+            .fetchMealsByName(name)
+            .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    when(it) {
+                        is Resource.Loading -> filteredMealsByNameState.value = MealState.Loading
+                        is Resource.Success -> filteredMealsByNameState.value = MealState.Success(it.data)
+                        is Resource.Error -> filteredMealsByNameState.value = MealState.Error("Error happened while fetching data from the server")
+                    }
+                },
+                {
+                    filteredMealsByNameState.value = MealState.Error("Error happened while fetching data from the server")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun printMealCategoryState(): String {
         val state = mealCategoryState.value
         println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
@@ -183,8 +205,8 @@ class MainViewModel(
 
     }
 
-    override fun getMealCardItemListFromMealState(): List<MealCardItem> {
-        val state = filteredMealsByCategoryState.value
+    override fun getMealCardItemListFromMealState(mealStateList: LiveData<MealState>): List<MealCardItem> {
+        val state = mealStateList.value
 
         if (state is MealState.Success) {
             val meals = state.meals
