@@ -1,12 +1,14 @@
 package rs.raf.vezbe11.data.models
 
+import java.io.Serializable
+
 class Meal (
     val idMeal: String?,
     val strMeal: String?,
     val strCategory: String?,
     val strArea: String?,
     val strInstructions: String?,
-    val strMealThumb: String?,
+    var strMealThumb: String?,
     val strTags: String?,
     val strYoutube: String?,
     val strIngredient1: String?,
@@ -29,7 +31,7 @@ class Meal (
     val strIngredient18: String?,
     val strIngredient19: String?,
     val strIngredient20: String?
-) {
+) : Serializable {
     fun getAllIngredients(): List<String> {
         val ingredients = mutableListOf<String>()
         this.apply {

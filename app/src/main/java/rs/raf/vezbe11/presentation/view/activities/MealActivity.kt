@@ -1,5 +1,6 @@
 package rs.raf.vezbe11.presentation.view.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -47,7 +48,7 @@ class MealActivity : AppCompatActivity() {
 
     private fun init() {
         initUI()
-        //initListeners()
+        initListeners()
         initObservers()
     }
 
@@ -85,9 +86,15 @@ class MealActivity : AppCompatActivity() {
         })
     }
 
-//    private fun initListeners() {
-//        TODO("Not yet implemented")
-//    }
+    private fun initListeners() {
+        saveBtn.setOnClickListener {
+
+            val intent = Intent(this, SaveMealActivity::class.java)
+            intent.putExtra("meal", meal)
+
+            startActivity(intent)
+        }
+    }
 
     private fun initUI() {
         imageView = findViewById(R.id.mealImageViewM)
