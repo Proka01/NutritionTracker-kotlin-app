@@ -1,5 +1,6 @@
 package rs.raf.vezbe11.presentation.view.recycler
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.presentation.view.activities.MealActivity
+import rs.raf.vezbe11.presentation.view.activities.MealListActivity
 
 class MealCardAdapter(private val cardsPerPage: Int) :
     RecyclerView.Adapter<MealCardAdapter.CardViewHolder>() {
@@ -58,7 +61,12 @@ class MealCardAdapter(private val cardsPerPage: Int) :
             itemView.setOnClickListener {
                 // Handle card click
                 // You can perform actions specific to the clicked card here
-                Toast.makeText(itemView.context, cardItem.strMeal, Toast.LENGTH_SHORT).show()
+                val context = itemView.context
+                val intent = Intent(context, MealActivity::class.java)
+                println("CARD ITEM ID : " + cardItem.idMeal)
+                intent.putExtra("id", cardItem.idMeal)
+                context.startActivity(intent)
+                //Toast.makeText(itemView.context, cardItem.strMeal, Toast.LENGTH_SHORT).show()
             }
         }
     }

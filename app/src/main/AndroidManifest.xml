@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Vezbe11">
         <activity
+            android:name=".presentation.view.activities.MealActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.view.activities.MealListActivity"
             android:exported="false" />
         <activity

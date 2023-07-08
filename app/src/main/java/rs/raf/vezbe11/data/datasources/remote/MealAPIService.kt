@@ -34,4 +34,8 @@ interface MealAPIService {
     @GET("list.php?i=list")
     fun getAllIngredients() : Observable<IngredientWrapperResponse>
 
+    @GET("lookup.php?")
+    fun getMealById(@Query("i") id : String): Observable<MealWrapperResponse>
+
+
 }

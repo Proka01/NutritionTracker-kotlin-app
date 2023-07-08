@@ -18,4 +18,6 @@ interface MealAPIRepository {
     fun fetchAllAreas() : Observable<Resource<List<MealResponse>>>
 
     fun fetchAllIngredients() : Observable<Resource<List<IngredientResponse>>>
+
+    fun fetchMealById(id : String): Observable<Resource<List<MealResponse>>>
 }

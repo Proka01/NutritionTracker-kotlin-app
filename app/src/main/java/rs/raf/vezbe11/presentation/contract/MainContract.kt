@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.presentation.contract
 
 import androidx.lifecycle.LiveData
+import rs.raf.vezbe11.data.models.Meal
 import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
 import rs.raf.vezbe11.presentation.view.states.IngrediantState
@@ -20,6 +21,7 @@ interface MainContract {
 
         val areaState : LiveData<MealState>
         val ingredientState : LiveData<IngrediantState>
+        val fetchedMealById : LiveData<MealState>
 
         fun fetchAllMealsByFirstLetter(letter : String)
         fun fetchAllMealCategories()
@@ -29,6 +31,8 @@ interface MainContract {
         fun fetchMealsByName(name : String)
         fun fetchAllAreas()
         fun fetchAllIngredients()
+        fun fetchMealById(id : String)
+
         fun printMealCategoryState() : String
         fun getMealCategoryListFromMealCategoryState() : List<MealCategory>
         fun getMealCardItemListFromMealState(mealStateList: LiveData<MealState>) : List<MealCardItem>
@@ -36,6 +40,8 @@ interface MainContract {
         fun getArrayOfCategories() : Array<String?>
         fun getArrayOfAreas() : Array<String?>
         fun getArrayOfIngredients() : Array<String?>
+
+        fun getFetchedMeal(): Meal?
     }
 
 }

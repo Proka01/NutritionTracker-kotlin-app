@@ -72,4 +72,12 @@ class MealAPIRepositoryImpl(
             }
     }
 
+    override fun fetchMealById(id : String): Observable<Resource<List<MealResponse>>> {
+        return remoteDataSource
+            .getMealById(id)
+            .map {
+                Resource.Success(it.meals)
+            }
+    }
+
 }

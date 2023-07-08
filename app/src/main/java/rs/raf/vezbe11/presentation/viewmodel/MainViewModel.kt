@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.raf.vezbe11.data.models.Meal
 import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.repositories.MealAPIRepository
@@ -30,6 +31,8 @@ class MainViewModel(
 
     override val areaState: MutableLiveData<MealState> = MutableLiveData()
     override val ingredientState: MutableLiveData<IngrediantState> = MutableLiveData()
+    override val fetchedMealById: MutableLiveData<MealState> = MutableLiveData()
+
     override fun fetchAllMealsByFirstLetter(letter : String) {
         var subscription = mealAPIRepository
             .fetchAllMealsByFirstLetter(letter)
@@ -206,6 +209,28 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    override fun fetchMealById(id : String) {
+        var subscription = mealAPIRepository
+            .fetchMealById(id)
+            .startWith(Resource.Loading()) //Kada se pokrene fetch hocemo da postavimo stanje na Loading
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    when(it) {
+                        is Resource.Loading -> fetchedMealById.value = MealState.Loading
+                        is Resource.Success -> fetchedMealById.value = MealState.Success(it.data)
+                        is Resource.Error -> fetchedMealById.value = MealState.Error("Error happened while fetching data from the server")
+                    }
+                },
+                {
+                    filteredMealsByCategoryState.value = MealState.Error("Error happened while fetching data from the server")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
     override fun printMealCategoryState(): String {
         val state = mealCategoryState.value
         println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
@@ -349,6 +374,49 @@ class MainViewModel(
         }
 
         return array // Return an empty list if the state is not success
+    }
+
+    override fun getFetchedMeal(): Meal? {
+        val state = fetchedMealById.value
+
+        if (state is MealState.Success) {
+            val meals = state.meals
+            val m = meals[0]
+
+            return Meal(
+                idMeal = m.idMeal,
+                strMeal = m.strMeal,
+                strCategory = m.strCategory,
+                strArea = m.strArea,
+                strInstructions = m.strInstructions,
+                strMealThumb = m.strMealThumb,
+                strTags = m.strTags,
+                strYoutube = m.strYoutube,
+                strIngredient1 = m.strIngredient1,
+                strIngredient2 = m.strIngredient2,
+                strIngredient3 = m.strIngredient3,
+                strIngredient4 = m.strIngredient4,
+                strIngredient5 = m.strIngredient5,
+                strIngredient6 = m.strIngredient6,
+                strIngredient7 = m.strIngredient7,
+                strIngredient8 = m.strIngredient8,
+                strIngredient9 = m.strIngredient9,
+                strIngredient10 = m.strIngredient10,
+                strIngredient11 = m.strIngredient11,
+                strIngredient12 = m.strIngredient12,
+                strIngredient13 = m.strIngredient13,
+                strIngredient14 = m.strIngredient14,
+                strIngredient15 = m.strIngredient15,
+                strIngredient16 = m.strIngredient16,
+                strIngredient17 = m.strIngredient17,
+                strIngredient18 = m.strIngredient18,
+                strIngredient19 = m.strIngredient19,
+                strIngredient20 = m.strIngredient20
+            )
+        }
+
+        return null // Return an empty list if the state is not success
+
     }
 
 
