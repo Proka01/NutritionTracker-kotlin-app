@@ -38,6 +38,8 @@ class MainViewModel(
     override val ingredientState: MutableLiveData<IngrediantState> = MutableLiveData()
     override val fetchedMealById: MutableLiveData<MealState> = MutableLiveData()
 
+    override val mealsFromDBState: MutableLiveData<MealDBState> = MutableLiveData()
+
     override fun fetchAllMealsByFirstLetter(letter : String) {
         var subscription = mealAPIRepository
             .fetchAllMealsByFirstLetter(letter)
@@ -423,34 +425,6 @@ class MainViewModel(
         return null // Return an empty list if the state is not success
     }
 
-//    override fun getReadMealsFromDB(): List<MealEntity> {
-//        val state = readMealsFromDB.value
-//
-//        if (state is MealDBState.Success) {
-//            val readMealEntities = state.mealsDB
-//            val retMealEntities = mutableListOf<MealEntity>()
-//
-//            for (me in readMealEntities) {
-//                val mealEntity = MealEntity(
-//                    id = me.id,
-//                    mealName = me.mealName,
-//                    thumbnailURL = me.thumbnailURL,
-//                    instructions = me.instructions,
-//                    youtubeLink = me.youtubeLink,
-//                    ingredients = me.ingredients,
-//                    mealCategory = me.mealCategory,
-//                    mealType = me.mealType,
-//                    date = me.date
-//                )
-//                retMealEntities.add(mealEntity)
-//            }
-//
-//            return retMealEntities
-//        }
-//
-//        return emptyList() // Return an empty list if the state is not success
-//    }
-
     override fun insertMeal(mealEntity: MealEntity) {
         val subscription = mealDBRepository
             .insertMeal(mealEntity)
@@ -490,13 +464,13 @@ class MainViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Timber.e("$it")
+                    println("PROCITO SVE IZ DB")
+                    mealsFromDBState.value = MealDBState.Success(it)
+                    println("ListaDB: $it")
                 },
                 {
+                    mealsFromDBState.value = MealDBState.Error("Error happened while fetching data from db")
                     Timber.e(it)
-                },
-                {
-                    Timber.e("ON COMPLETE")
                 }
             )
         subscriptions.add(subscription)

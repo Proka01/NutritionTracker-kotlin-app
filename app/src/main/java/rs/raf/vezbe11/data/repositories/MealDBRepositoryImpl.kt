@@ -16,7 +16,23 @@ class MealDBRepositoryImpl(private val mealDao: MealDao) : MealDBRepository {
     }
 
     override fun getAllMeals(): Observable<List<MealEntity>> {
-        return mealDao.getAllMeals()
+        return mealDao
+            .getAllMeals()
+            .map {
+                it.map {
+                    MealEntity(
+                        id = it.id,
+                        mealName = it.mealName,
+                        thumbnailURL = it.thumbnailURL,
+                        instructions = it.instructions,
+                        youtubeLink = it.youtubeLink,
+                        ingredients = it.ingredients,
+                        mealCategory = it.mealCategory,
+                        mealType = it.mealType,
+                        date = it.date
+                    )
+                }
+            }
     }
 
     override fun getMealById(id: Long): MealEntity {

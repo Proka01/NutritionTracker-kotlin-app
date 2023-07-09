@@ -26,7 +26,7 @@ interface MainContract {
         val ingredientState : LiveData<IngrediantState>
         val fetchedMealById : LiveData<MealState>
 
-        //val readMealsFromDB: LiveData<MealDBState>
+        val mealsFromDBState: LiveData<MealDBState>
 
         //Meal API
         fun fetchAllMealsByFirstLetter(letter : String)
@@ -47,8 +47,6 @@ interface MainContract {
         fun getArrayOfAreas() : Array<String?>
         fun getArrayOfIngredients() : Array<String?>
         fun getFetchedMeal(): Meal?
-        //fun getReadMealsFromDB() : List<MealEntity>
-
         //Meal DB
         fun insertMeal(mealEntity: MealEntity)
         fun insertMeals(mealEntities: List<MealEntity>)

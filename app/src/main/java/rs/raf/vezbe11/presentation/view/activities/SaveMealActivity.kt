@@ -1,6 +1,7 @@
 package rs.raf.vezbe11.presentation.view.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -24,8 +25,10 @@ import rs.raf.vezbe11.data.datasources.local.db.MealEntity
 import rs.raf.vezbe11.data.models.Meal
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
+import rs.raf.vezbe11.presentation.view.states.MealDBState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import rs.raf.vezbe11.presentation.viewmodel.MainViewModel
+import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -35,7 +38,7 @@ import java.util.*
 class SaveMealActivity : AppCompatActivity() {
 
     private val mainViewModel: MainContract.ViewModel by viewModel<MainViewModel>()
-    var mealEntitiesFromDB: MutableList<MealEntity> = mutableListOf<MealEntity>()
+    private lateinit var mealEntitiesFromDB: List<MealEntity>
 
     private lateinit var imageView: ImageView
     private lateinit var titleTV : TextView
@@ -54,6 +57,7 @@ class SaveMealActivity : AppCompatActivity() {
 
         meal = (intent.getSerializableExtra("meal") as? Meal)!!
         Toast.makeText(applicationContext, meal.strMeal, Toast.LENGTH_SHORT).show()
+        mainViewModel.getAllMeals()
         init()
 
         if (ContextCompat.checkSelfPermission(this@SaveMealActivity,
@@ -136,25 +140,25 @@ class SaveMealActivity : AppCompatActivity() {
         initSpinner()
         fillUI()
         initListeners()
-        //initObservers()
+        initObservers()
     }
 
-//    private fun initObservers() {
-//        mainViewModel.readMealsFromDB.observe(this, Obse {
-//            when(it){
-//                is MealState.Success ->{
-//                    mealCardItems = mainViewModel.getMealCardItemListFromMealState(mainViewModel.filteredMealsByCategoryState).toMutableList()
-//                    initRecycler()
-//                }
-//                is MealState.Loading ->{
-//                    println("State je loading")
-//                }
-//                else -> {
-//                    println("CEKAJ $it")
-//                }
-//            }
-//        })
-//    }
+    private fun initObservers() {
+        mainViewModel.mealsFromDBState.observe(this, androidx.lifecycle.Observer {
+            when(it){
+                is MealDBState.Success ->{
+                    mealEntitiesFromDB = it.mealsDB
+                }
+                is MealDBState.Loading ->{
+                    println("State je loading")
+                }
+                else -> {
+                    println("CEKAJ $it")
+                }
+            }
+        })
+    }
+
 
     private fun initUI() {
         imageView = findViewById(R.id.imageViewS)
@@ -180,7 +184,6 @@ class SaveMealActivity : AppCompatActivity() {
             .placeholder(R.drawable.ic_launcher_background) // Optional placeholder image
             //.error(R.drawable.error_image) // Optional error image
             .into(imageView)
-
         titleTV.text = meal.strMeal ?: "Not available"
     }
 
@@ -222,7 +225,8 @@ class SaveMealActivity : AppCompatActivity() {
         }
 
         debugBtn.setOnClickListener{
-            var mealEntities = mainViewModel.getAllMeals()
+            var m = mealEntitiesFromDB[0]
+            Toast.makeText(applicationContext, m.mealName, Toast.LENGTH_SHORT).show()
         }
     }
 
