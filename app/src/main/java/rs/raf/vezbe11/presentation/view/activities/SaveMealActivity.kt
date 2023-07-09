@@ -210,7 +210,7 @@ class SaveMealActivity : AppCompatActivity() {
             val selectedDate: Date = calendar.time
 
             var mealEntity = MealEntity(
-                id = 1,
+                id = (meal.idMeal)!!.toLong(),
                 mealName = meal.strMeal,
                 thumbnailURL = meal.strMealThumb,
                 instructions = meal.strInstructions,
