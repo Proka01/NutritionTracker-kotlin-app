@@ -222,6 +222,7 @@ class SaveMealActivity : AppCompatActivity() {
             )
 
             mainViewModel.insertMeal(mealEntity)
+            Toast.makeText(applicationContext, "Meal saved", Toast.LENGTH_SHORT).show()
         }
 
         debugBtn.setOnClickListener{

@@ -11,4 +11,10 @@
         android:text="Fragment planner"
         android:textSize="24sp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="myMeals"
+        android:id="@+id/myMealsBtn"/>
+
 </LinearLayout>
