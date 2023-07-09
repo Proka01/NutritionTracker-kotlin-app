@@ -52,11 +52,19 @@
 
     <!-- Button -->
     <Button
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="10dp"
         android:id="@+id/saveMealBtnS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save meal"
+        android:layout_gravity="center_horizontal"/>
+
+    <Button
+        android:layout_marginTop="80dp"
+        android:id="@+id/debugBtnS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Debug"
         android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

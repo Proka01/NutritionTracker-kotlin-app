@@ -3,22 +3,27 @@ package rs.raf.vezbe11.presentation.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import rs.raf.vezbe11.data.datasources.local.db.MealEntity
 import rs.raf.vezbe11.data.models.Meal
 import rs.raf.vezbe11.data.models.MealCategory
 import rs.raf.vezbe11.data.models.Resource
 import rs.raf.vezbe11.data.repositories.MealAPIRepository
+import rs.raf.vezbe11.data.repositories.MealDBRepository
 import rs.raf.vezbe11.presentation.contract.MainContract
 import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
 import rs.raf.vezbe11.presentation.view.states.IngrediantState
 import rs.raf.vezbe11.presentation.view.states.MealCategoryState
+import rs.raf.vezbe11.presentation.view.states.MealDBState
 import rs.raf.vezbe11.presentation.view.states.MealState
 import timber.log.Timber
 
 class MainViewModel(
     private val mealAPIRepository: MealAPIRepository,
+    private val mealDBRepository: MealDBRepository
 ) : ViewModel(), MainContract.ViewModel {
 
     private val subscriptions = CompositeDisposable()
@@ -416,7 +421,85 @@ class MainViewModel(
         }
 
         return null // Return an empty list if the state is not success
+    }
 
+//    override fun getReadMealsFromDB(): List<MealEntity> {
+//        val state = readMealsFromDB.value
+//
+//        if (state is MealDBState.Success) {
+//            val readMealEntities = state.mealsDB
+//            val retMealEntities = mutableListOf<MealEntity>()
+//
+//            for (me in readMealEntities) {
+//                val mealEntity = MealEntity(
+//                    id = me.id,
+//                    mealName = me.mealName,
+//                    thumbnailURL = me.thumbnailURL,
+//                    instructions = me.instructions,
+//                    youtubeLink = me.youtubeLink,
+//                    ingredients = me.ingredients,
+//                    mealCategory = me.mealCategory,
+//                    mealType = me.mealType,
+//                    date = me.date
+//                )
+//                retMealEntities.add(mealEntity)
+//            }
+//
+//            return retMealEntities
+//        }
+//
+//        return emptyList() // Return an empty list if the state is not success
+//    }
+
+    override fun insertMeal(mealEntity: MealEntity) {
+        val subscription = mealDBRepository
+            .insertMeal(mealEntity)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Timber.e("COMPLETE")
+                },
+                {
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun insertMeals(mealEntities: List<MealEntity>) {
+        val subscription = mealDBRepository
+            .insertMeals(mealEntities)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Timber.e("INSERTED STUDENTS WITH IDs:  $it")
+                },
+                {
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
+    override fun getAllMeals() {
+        val subscription = mealDBRepository
+            .getAllMeals()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Timber.e("$it")
+                },
+                {
+                    Timber.e(it)
+                },
+                {
+                    Timber.e("ON COMPLETE")
+                }
+            )
+        subscriptions.add(subscription)
     }
 
 

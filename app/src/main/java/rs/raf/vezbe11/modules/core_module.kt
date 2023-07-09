@@ -14,6 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import rs.raf.vezbe11.BuildConfig
+import rs.raf.vezbe11.data.datasources.local.db.MealDataBase
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -22,6 +23,10 @@ val coreModule = module {
     single<SharedPreferences> {
         androidApplication().getSharedPreferences(androidApplication().packageName, Context.MODE_PRIVATE)
     }
+
+    single { Room.databaseBuilder(androidContext(), MealDataBase::class.java, "MealsDB")
+        .fallbackToDestructiveMigration()
+        .build() }
 
     single { createRetrofit(moshi = get(), httpClient = get()) }
 

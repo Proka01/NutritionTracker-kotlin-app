@@ -18,8 +18,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.data.datasources.local.db.MealEntity
 import rs.raf.vezbe11.data.models.Meal
+import rs.raf.vezbe11.presentation.contract.MainContract
+import rs.raf.vezbe11.presentation.view.recycler.MealCardItem
+import rs.raf.vezbe11.presentation.view.states.MealState
+import rs.raf.vezbe11.presentation.viewmodel.MainViewModel
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -28,11 +34,15 @@ import java.util.*
 
 class SaveMealActivity : AppCompatActivity() {
 
+    private val mainViewModel: MainContract.ViewModel by viewModel<MainViewModel>()
+    var mealEntitiesFromDB: MutableList<MealEntity> = mutableListOf<MealEntity>()
+
     private lateinit var imageView: ImageView
     private lateinit var titleTV : TextView
     private lateinit var datePicker: DatePicker
     private lateinit var spinner: Spinner
     private lateinit var saveMealBtn : Button
+    private lateinit var debugBtn : Button
     private lateinit var meal : Meal
 
     val REQUEST_CODE = 200
@@ -92,6 +102,7 @@ class SaveMealActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE && data != null){
             val bitmap = data.extras?.get("data") as Bitmap
             val imageString = bitmapToBase64(bitmap)
+            meal.strMealThumb = imageString
 
             // Assuming you have the Base64 encoded image string in the variable "imageString"
             val decodedByteArray = android.util.Base64.decode(imageString, android.util.Base64.DEFAULT)
@@ -125,7 +136,25 @@ class SaveMealActivity : AppCompatActivity() {
         initSpinner()
         fillUI()
         initListeners()
+        //initObservers()
     }
+
+//    private fun initObservers() {
+//        mainViewModel.readMealsFromDB.observe(this, Obse {
+//            when(it){
+//                is MealState.Success ->{
+//                    mealCardItems = mainViewModel.getMealCardItemListFromMealState(mainViewModel.filteredMealsByCategoryState).toMutableList()
+//                    initRecycler()
+//                }
+//                is MealState.Loading ->{
+//                    println("State je loading")
+//                }
+//                else -> {
+//                    println("CEKAJ $it")
+//                }
+//            }
+//        })
+//    }
 
     private fun initUI() {
         imageView = findViewById(R.id.imageViewS)
@@ -133,7 +162,7 @@ class SaveMealActivity : AppCompatActivity() {
         spinner = findViewById(R.id.spinnerS)
         datePicker = findViewById(R.id.datePickerS)
         saveMealBtn = findViewById(R.id.saveMealBtnS)
-
+        debugBtn = findViewById(R.id.debugBtnS)
     }
 
     private fun initSpinner() {
@@ -159,6 +188,41 @@ class SaveMealActivity : AppCompatActivity() {
         imageView.setOnClickListener {
             Toast.makeText(applicationContext, "USOO", Toast.LENGTH_SHORT).show()
             capturePhoto()
+        }
+
+        saveMealBtn.setOnClickListener{
+
+            var selectedMealType = spinner.selectedItem as String
+
+            // Get the selected year, month, and day from the DatePicker
+            val year = datePicker.year
+            val month = datePicker.month
+            val day = datePicker.dayOfMonth
+
+            // Create a Calendar instance and set the selected year, month, and day
+            val calendar = Calendar.getInstance()
+            calendar.set(year, month, day)
+
+            // Retrieve the Date object from the Calendar instance
+            val selectedDate: Date = calendar.time
+
+            var mealEntity = MealEntity(
+                id = 1,
+                mealName = meal.strMeal,
+                thumbnailURL = meal.strMealThumb,
+                instructions = meal.strInstructions,
+                youtubeLink = meal.strYoutube,
+                ingredients = meal.concatenateStrings(meal.getAllIngredients()),
+                mealCategory = meal.strCategory,
+                mealType = selectedMealType,
+                date = selectedDate
+            )
+
+            mainViewModel.insertMeal(mealEntity)
+        }
+
+        debugBtn.setOnClickListener{
+            var mealEntities = mainViewModel.getAllMeals()
         }
     }
 
