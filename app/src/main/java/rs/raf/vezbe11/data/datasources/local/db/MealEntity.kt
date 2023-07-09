@@ -16,4 +16,4 @@ data class MealEntity(
     var mealCategory: String?, //Beef, Seafood, ...
     var mealType: String?, // Breakfast, Lunch, Dinner, Snack
     var date: Date = Date()
-)
+) : java.io.Serializable

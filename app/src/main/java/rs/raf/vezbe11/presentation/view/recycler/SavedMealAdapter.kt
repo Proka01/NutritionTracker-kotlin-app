@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import rs.raf.vezbe11.R
 import rs.raf.vezbe11.data.datasources.local.db.MealEntity
+import rs.raf.vezbe11.presentation.view.activities.EditMyMealActivity
 import rs.raf.vezbe11.presentation.view.activities.MealListActivity
 
 class SavedMealAdapter(private val mealEntities: List<MealEntity>) :
@@ -65,7 +66,10 @@ class SavedMealAdapter(private val mealEntities: List<MealEntity>) :
             }
 
             editIcon.setOnClickListener {
-
+                val context = itemView.context
+                val intent = Intent(context, EditMyMealActivity::class.java)
+                intent.putExtra("mealEntity", mealEntityItem)
+                context.startActivity(intent)
             }
 
             // Set click listener for the whole card
