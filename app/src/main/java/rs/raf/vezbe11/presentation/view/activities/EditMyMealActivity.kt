@@ -214,13 +214,13 @@ class EditMyMealActivity : AppCompatActivity() {
             mealEntity.mealType = selectedMealType
             mealEntity.date = selectedDate
 
-            //mainViewModel.update
+            mainViewModel.insertMeal(mealEntity)
             Toast.makeText(applicationContext, "Meal saved", Toast.LENGTH_SHORT).show()
         }
 
         deleteBtn.setOnClickListener{
-            //mainViewModel.delete
-            Toast.makeText(applicationContext, "delete", Toast.LENGTH_SHORT).show()
+            mainViewModel.deleteMeal(mealEntity)
+            Toast.makeText(applicationContext, "meal deleted", Toast.LENGTH_SHORT).show()
         }
     }
 }

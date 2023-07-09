@@ -51,6 +51,7 @@ interface MainContract {
         fun insertMeal(mealEntity: MealEntity)
         fun insertMeals(mealEntities: List<MealEntity>)
         fun getAllMeals()
+        fun deleteMeal(mealEntity: MealEntity)
     }
 
 }

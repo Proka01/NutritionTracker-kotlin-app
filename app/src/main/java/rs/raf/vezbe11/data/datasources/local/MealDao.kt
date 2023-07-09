@@ -29,7 +29,7 @@ abstract class MealDao {
     abstract fun updateMealNameById(id: Long, name: String): Completable
 
     @Delete
-    abstract fun delete(mealEntity: MealEntity)
+    abstract fun delete(mealEntity: MealEntity) : Completable
 
     // Ova metoda se manje uklapa u ceo koncept kada radimo sa ORM-om, ali radi
     // identicnu stvar kao metoda iznad

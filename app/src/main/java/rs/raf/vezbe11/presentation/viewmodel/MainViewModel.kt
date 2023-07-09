@@ -476,6 +476,23 @@ class MainViewModel(
         subscriptions.add(subscription)
     }
 
+    override fun deleteMeal(mealEntity: MealEntity) {
+        val subscription = mealDBRepository
+            .delete(mealEntity)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    println("deleted meal from DB")
+                },
+                {
+                    println("Error deleting meal from DB")
+                    Timber.e(it)
+                }
+            )
+        subscriptions.add(subscription)
+    }
+
 
     override fun onCleared() {
         super.onCleared()

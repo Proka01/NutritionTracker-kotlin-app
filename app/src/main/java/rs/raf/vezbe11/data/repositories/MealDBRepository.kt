@@ -19,7 +19,7 @@ interface MealDBRepository {
 
     fun updateMealNameById(id: Long, name: String): Completable
 
-    fun delete(mealEntity: MealEntity)
+    fun delete(mealEntity: MealEntity) : Completable
 
     fun deleteById(id: Long)
 

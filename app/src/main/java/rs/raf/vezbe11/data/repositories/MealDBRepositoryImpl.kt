@@ -53,7 +53,7 @@ class MealDBRepositoryImpl(private val mealDao: MealDao) : MealDBRepository {
         }
     }
 
-    override fun delete(mealEntity: MealEntity) {
+    override fun delete(mealEntity: MealEntity) : Completable {
         return mealDao.delete(mealEntity)
     }
 
