@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/radioGroupPlanner"
+        android:checkedButton="@+id/myMealsPlannerRBTN"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/myMealsPlannerRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="My meals"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/categoryPlannerRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Category"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/areaPlannerRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Area"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+
+        <RadioButton
+            android:id="@+id/ingredientPlannerRBTN"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ingredient"
+            android:button="@null"
+            android:background="@drawable/button_selector"
+            android:gravity="center" />
+    </RadioGroup>
+
+    <!-- Combobox (Spinner) -->
+    <Spinner
+        android:id="@+id/comboBoxPlanner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <Spinner
+        android:id="@+id/comboBoxDaysPlanner"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:orientation="vertical">
+
+        <!-- recyclerview_layout.xml -->
+        <androidx.recyclerview.widget.RecyclerView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recyclerViewPlanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendBtnPlanner"
+        android:layout_gravity="center_horizontal"
+        android:text="Send" />
+
+</LinearLayout>

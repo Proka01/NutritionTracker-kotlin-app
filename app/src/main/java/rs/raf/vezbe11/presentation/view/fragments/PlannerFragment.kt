@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import rs.raf.vezbe11.R
+import rs.raf.vezbe11.presentation.view.activities.DailyPlannerActivity
 import rs.raf.vezbe11.presentation.view.activities.MyMealsActivity
 
 class PlannerFragment : Fragment() {
 
     private lateinit var myMealsBtn : Button
+    private lateinit var dailyPlannerBtn : Button
     private lateinit var rootView: View
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,9 +36,15 @@ class PlannerFragment : Fragment() {
         val intent = Intent(this.context, MyMealsActivity::class.java)
         startActivity(intent)
         }
+
+        dailyPlannerBtn.setOnClickListener{
+            val intent = Intent(this.context, DailyPlannerActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun initUI() {
         myMealsBtn = rootView.findViewById(R.id.myMealsBtn)
+        dailyPlannerBtn = rootView.findViewById(R.id.dailyPlannerBtn)
     }
 }

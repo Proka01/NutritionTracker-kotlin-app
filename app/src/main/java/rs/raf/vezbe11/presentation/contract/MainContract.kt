@@ -47,6 +47,9 @@ interface MainContract {
         fun getArrayOfAreas() : Array<String?>
         fun getArrayOfIngredients() : Array<String?>
         fun getFetchedMeal(): Meal?
+
+        fun getMealCardItemListFromMealDBState(mealDBStateList: LiveData<MealDBState>) : List<MealCardItem>
+
         //Meal DB
         fun insertMeal(mealEntity: MealEntity)
         fun insertMeals(mealEntities: List<MealEntity>)

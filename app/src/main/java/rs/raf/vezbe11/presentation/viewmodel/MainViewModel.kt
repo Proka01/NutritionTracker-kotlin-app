@@ -425,6 +425,53 @@ class MainViewModel(
         return null // Return an empty list if the state is not success
     }
 
+    override fun getMealCardItemListFromMealDBState(mealDBStateList: LiveData<MealDBState>): List<MealCardItem> {
+        val state = mealDBStateList.value
+
+        if (state is MealDBState.Success) {
+            val meals = state.mealsDB
+            val mealsList = mutableListOf<MealCardItem>()
+
+            for (m in meals) {
+                val meal = MealCardItem(
+                    idMeal = m.id.toString(),
+                    strMeal = m.mealName,
+                    strCategory = m.mealCategory,
+                    strArea = null,
+                    strInstructions = m.instructions,
+                    strMealThumb = m.thumbnailURL,
+                    strTags = null,
+                    strYoutube = m.youtubeLink,
+                    strIngredient1 = null,
+                    strIngredient2 = null,
+                    strIngredient3 = null,
+                    strIngredient4 = null,
+                    strIngredient5 = null,
+                    strIngredient6 = null,
+                    strIngredient7 = null,
+                    strIngredient8 = null,
+                    strIngredient9 = null,
+                    strIngredient10 = null,
+                    strIngredient11 = null,
+                    strIngredient12 = null,
+                    strIngredient13 = null,
+                    strIngredient14 = null,
+                    strIngredient15 = null,
+                    strIngredient16 = null,
+                    strIngredient17 = null,
+                    strIngredient18 = null,
+                    strIngredient19 = null,
+                    strIngredient20 = null
+                )
+                mealsList.add(meal)
+            }
+
+            return mealsList
+        }
+
+        return emptyList() // Return an empty list if the state is not success
+    }
+
     override fun insertMeal(mealEntity: MealEntity) {
         val subscription = mealDBRepository
             .insertMeal(mealEntity)

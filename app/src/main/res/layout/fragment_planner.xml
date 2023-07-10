@@ -17,4 +17,11 @@
         android:text="myMeals"
         android:id="@+id/myMealsBtn"/>
 
+    <Button
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Daily planner"
+        android:id="@+id/dailyPlannerBtn"/>
+
 </LinearLayout>
