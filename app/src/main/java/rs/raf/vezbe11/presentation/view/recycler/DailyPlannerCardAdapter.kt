@@ -16,18 +16,20 @@ import rs.raf.vezbe11.data.models.DailyPlan
 import rs.raf.vezbe11.presentation.view.activities.MealActivity
 import java.time.DayOfWeek
 
-class DailyPlannerCardAdapter(private var dayOfTheWeek: String) :
+class DailyPlannerCardAdapter(private var dayOfTheWeek: String, private var mealType: String) :
     RecyclerView.Adapter<DailyPlannerCardAdapter.CardViewHolder>() {
 
     //added
     private var mealCardItems: MutableList<MealCardItem> = mutableListOf()
-    private lateinit var dailyPlan: DailyPlan
+    private var dailyPlan = DailyPlan()
 
     fun updateDayOfTheWeek(newDay: String)
     {
         dayOfTheWeek = newDay
     }
-
+    fun updateMealType(newMealType: String) {
+        mealType = newMealType
+    }
     fun updateDailyPlan(newDailyPlan: DailyPlan)
     {
         dailyPlan = newDailyPlan
@@ -92,7 +94,68 @@ class DailyPlannerCardAdapter(private var dayOfTheWeek: String) :
 
             // Set click listener for the whole card
             itemView.setOnClickListener {
-                Toast.makeText(itemView.context, dayOfTheWeek + ":" + cardItem.strMeal, Toast.LENGTH_SHORT).show()
+                Toast.makeText(itemView.context, dayOfTheWeek + " , " + mealType + ": " + cardItem.strMeal, Toast.LENGTH_SHORT).show()
+
+
+                when (dayOfTheWeek) {
+                    "Monday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Tuesday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Wednesday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Thursday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Friday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Saturday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                    "Sunday" -> {
+                        when (mealType) {
+                            "Breakfast" -> dailyPlan.getMondayDP().addBreakfastItem(cardItem)
+                            "Lunch" -> dailyPlan.getMondayDP().addLunchItem(cardItem)
+                            "Dinner" -> dailyPlan.getMondayDP().addDinnerItem(cardItem)
+                            "Snack" -> dailyPlan.getMondayDP().addSnackItem(cardItem)
+                        }
+                    }
+                }
+
             }
         }
     }

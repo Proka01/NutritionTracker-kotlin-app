@@ -1,5 +1,7 @@
 package rs.raf.vezbe11.presentation.view.activities
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -28,7 +30,9 @@ class DailyPlannerActivity : AppCompatActivity() {
     private lateinit var ingredientRadioButton: RadioButton
     private lateinit var spinner: Spinner
     private lateinit var daysCheckSpinner: Spinner
+    private lateinit var mealTypeSpinner: Spinner
     private lateinit var sendBtn: Button
+    private lateinit var emailEditText : EditText
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: LinearLayoutManager
@@ -50,11 +54,11 @@ class DailyPlannerActivity : AppCompatActivity() {
         initUI()
         initSpinner(arrayOf("Saved meals"))
         spinner.isEnabled = false
-        initDaysSpinner()
+        initOtherSpinners()
         initLister()
         initObservers()
 
-        adapter = DailyPlannerCardAdapter(daysCheckSpinner.selectedItem as String)
+        adapter = DailyPlannerCardAdapter(daysCheckSpinner.selectedItem as String, mealTypeSpinner.selectedItem as String)
     }
 
     private fun initRecycler() {
@@ -133,6 +137,18 @@ class DailyPlannerActivity : AppCompatActivity() {
     }
 
     private fun initLister() {
+        mealTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = mealTypeSpinner.selectedItem as String
+                adapter.updateMealType(selectedItem)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle the case when nothing is selected
+                // ...
+            }
+        }
+
         daysCheckSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selectedItem = daysCheckSpinner.selectedItem as String
@@ -188,6 +204,10 @@ class DailyPlannerActivity : AppCompatActivity() {
                 }
             }
         }
+
+        sendBtn.setOnClickListener{
+            sendEmail(emailEditText.text.toString(),"Meal eating plan",adapter.getDailyPlan().formatEmailBody())
+        }
     }
 
     private fun initSpinner(items : Array<String?>) {
@@ -209,7 +229,7 @@ class DailyPlannerActivity : AppCompatActivity() {
         }
     }
 
-    private fun initDaysSpinner() {
+    private fun initOtherSpinners() {
 
         val daysOfWeek = arrayOf(
             "Sunday",
@@ -224,6 +244,17 @@ class DailyPlannerActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, daysOfWeek)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         daysCheckSpinner.adapter = adapter
+
+        val mealTypes = arrayOf(
+            "Breakfast",
+            "Lunch",
+            "Dinner",
+            "Snack"
+        )
+
+        val adapter2 = ArrayAdapter(this, android.R.layout.simple_spinner_item, mealTypes)
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        mealTypeSpinner.adapter = adapter2
     }
 
     private fun initUI() {
@@ -233,6 +264,27 @@ class DailyPlannerActivity : AppCompatActivity() {
         ingredientRadioButton = findViewById(R.id.ingredientPlannerRBTN)
         spinner = findViewById<Spinner>(R.id.comboBoxPlanner)
         daysCheckSpinner = findViewById<Spinner>(R.id.comboBoxDaysPlanner)
+        mealTypeSpinner = findViewById<Spinner>(R.id.mealTypeSpinner)
         sendBtn = findViewById(R.id.sendBtnPlanner)
+        emailEditText = findViewById(R.id.emailEditText)
     }
+
+    public fun sendEmail(sendto : String, emailsubject : String, emailbody : String) {
+
+        // define Intent object with action attribute as ACTION_SEND
+        val intent = Intent(Intent.ACTION_SEND)
+
+        // add three fields to intent using putExtra function
+        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(sendto))
+        intent.putExtra(Intent.EXTRA_SUBJECT, emailsubject)
+        intent.putExtra(Intent.EXTRA_TEXT, emailbody)
+
+        // set type of intent
+        intent.type = "message/rfc822"
+
+        // startActivity with intent with chooser as Email client using createChooser function
+        startActivity(Intent.createChooser(intent, "Choose an Email client :"))
+    }
+
+
 }
